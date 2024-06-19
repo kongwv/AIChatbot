@@ -1,33 +1,29 @@
-import Versions from './components/Versions'
-import electronLogo from './assets/electron.svg'
+import { useState } from 'react'
+import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
+import { MainContainer, ChatContainer, MessageList, Message, MessageInput } from '@chatscope/chat-ui-kit-react';
 
 function App() {
-  const ipcHandle = () => window.electron.ipcRenderer.send('ping')
+  const ipcHandle = () => window.electron.ipcRenderer.send('ping');
+  const [messages, setMessages] = useState([
+    {
+      message: "Hello, how can I help you",
+      sender: "Chatbot"
+    }
+  ]);
 
   return (
-    <>
-      <img alt="logo" className="logo" src={electronLogo} />
-      <div className="creator">Powered by electron-vite</div>
-      <div className="text">
-        Build an Electron app with <span className="react">React</span>
-      </div>
-      <p className="tip">
-        Please try pressing <code>F12</code> to open the devTool
-      </p>
-      <div className="actions">
-        <div className="action">
-          <a href="https://electron-vite.org/" target="_blank" rel="noreferrer">
-            Documentation
-          </a>
-        </div>
-        <div className="action">
-          <a target="_blank" rel="noreferrer" onClick={ipcHandle}>
-            Send IPC
-          </a>
-        </div>
-      </div>
-      <Versions></Versions>
-    </>
+    <div style={{position:"relative", height:"700px", width:"550px"}}>
+      <MainContainer>
+        <ChatContainer>
+          <MessageList>
+            {messages.map((message, i) => {
+              return <Message key={i} model={message}/>
+            })}
+          </MessageList>
+          <MessageInput placeholder="Type message here" attachButton={false}/>
+        </ChatContainer>
+      </MainContainer>
+    </div>
   )
 }
 

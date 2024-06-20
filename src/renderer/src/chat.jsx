@@ -4,7 +4,9 @@ import { MainContainer, ChatContainer, MessageList, Message, MessageInput, Typin
 
 function Chat() {
   const ipcHandle = () => window.electron.ipcRenderer.send('ping');
+  
   const [typing, setTyping] = useState(false)
+  
   const [messages, setMessages] = useState([
     {
       message: "Hello, how can I help you",

@@ -5,17 +5,26 @@ import icon from '../../resources/icon.png?asset'
 
 function createWindow() {
   // Create the browser window.
+
+
+//   x number - The x coordinate of the origin of the rectangle (must be an integer).
+// y number - The y coordinate of the origin of the rectangle (must be an integer).
+// width number - The width of the rectangle (must be an integer).
+// height number - The height of the rectangle (must be an integer).
   const mainWindow = new BrowserWindow({
-    width: 900,
-    height: 800,
+    width: 350,
+    height: 550,
     show: false,
+    devTools : true,
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
     }
+    
   })
+  
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
@@ -28,11 +37,9 @@ function createWindow() {
 
   // HMR for renderer base on electron-vite cli.
   // Load the remote URL for development or the local html file for production.
-  if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-    mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
-  } else {
-    mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
-  }
+  mainWindow.loadURL('https://cpall.ekoapp.com/recents/group/6669208d070d2e1ffd9d7e48/chat/t/6669208d070d2e53b59d7e4a')
+
+  
 }
 
 // This method will be called when Electron has finished

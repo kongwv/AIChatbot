@@ -2,7 +2,7 @@ import { useState } from 'react'
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import { MainContainer, ChatContainer, MessageList, Message, MessageInput } from '@chatscope/chat-ui-kit-react';
 
-function App() {
+function Chat() {
   const ipcHandle = () => window.electron.ipcRenderer.send('ping');
   const [messages, setMessages] = useState([
     {
@@ -27,5 +27,5 @@ function App() {
   )
 }
 
-export default App
+export default Chat
 

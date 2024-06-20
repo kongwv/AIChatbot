@@ -32,7 +32,7 @@ function Chat() {
   }
 
   return (
-    <div style={{position:"relative", height:"550px", width:"400px"}}>
+    <div style={{position:"relative", height:"550px", width:"350px"}}>
       <MainContainer>
         <ChatContainer>
           <MessageList typingIndicator = {typing ? <TypingIndicator content={"Typing"}/> : null}>

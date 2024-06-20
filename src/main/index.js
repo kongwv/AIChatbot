@@ -6,14 +6,11 @@ import icon from '../../resources/icon.png?asset'
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 350,
+    width: 400,
     height: 550,
-    // width: 800,
-    // height: 800,
     show: false,
     autoHideMenuBar: true,
-    frame: false, 
-    
+    frame: false,
 
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
@@ -25,8 +22,7 @@ function createWindow() {
   mainWindow.resizable = false
   mainWindow.setSkipTaskbar(true)
   mainWindow.on('ready-to-show', () => {
-  mainWindow.show()
-    
+    mainWindow.show()
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {

@@ -32,11 +32,7 @@ function Chat() {
   }
 
   return (
-<<<<<<< Updated upstream
-    <div style={{position:"relative", height:"550px", width:"350px"}}>
-=======
-    <div style={{position:"relative", height:"500px", width:"550px"}}>
->>>>>>> Stashed changes
+    <div style={{position:"relative", height:"550px", width:"400px"}}>
       <MainContainer>
         <ChatContainer>
           <MessageList typingIndicator = {typing ? <TypingIndicator content={"Typing"}/> : null}>

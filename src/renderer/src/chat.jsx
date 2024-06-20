@@ -12,7 +12,7 @@ function Chat() {
   ]);
 
   return (
-    <div style={{position:"relative", height:"700px", width:"550px"}}>
+    <div style={{position:"relative", height:"550px", width:"350px"}}>
       <MainContainer>
         <ChatContainer>
           <MessageList>

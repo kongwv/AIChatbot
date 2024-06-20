@@ -7,9 +7,22 @@ function Chat() {
   const [messages, setMessages] = useState([
     {
       message: "Hello, how can I help you",
-      sender: "Chatbot"
+      sender: "Chatbot",
+      direction: "ingoing"
     }
   ]);
+
+  const handleSend = async (message) => {
+    const newMessage = {
+      message: message,
+      sender: "user",
+      direction: "outgoing"
+    }
+    
+    const newMessages = [...messages, newMessage];
+
+    setMessages(newMessages);
+  }
 
   return (
     <div style={{position:"relative", height:"700px", width:"550px"}}>
@@ -20,7 +33,7 @@ function Chat() {
               return <Message key={i} model={message}/>
             })}
           </MessageList>
-          <MessageInput placeholder="Type message here" attachButton={false}/>
+          <MessageInput placeholder="Type message here" attachButton={false} onSend={handleSend}/>
         </ChatContainer>
       </MainContainer>
     </div>

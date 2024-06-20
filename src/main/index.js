@@ -6,33 +6,42 @@ import icon from '../../resources/icon.png?asset'
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 900,
-    height: 800,
+    width: 350,
+    height: 550,
+    // width: 800,
+    // height: 800,
     show: false,
     autoHideMenuBar: true,
+    frame: false, 
+    
+
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
     }
   })
-
+  mainWindow.setPosition(925, 120)
+  mainWindow.resizable = false
+  mainWindow.setSkipTaskbar(true)
   mainWindow.on('ready-to-show', () => {
-    mainWindow.show()
+  mainWindow.show()
+    
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
     return { action: 'deny' }
   })
-
-  // HMR for renderer base on electron-vite cli.
-  // Load the remote URL for development or the local html file for production.
+  // mainWindow.loadFile('./src/renderer/chat.jsx')
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
+  // HMR for renderer base on electron-vite cli.
+  // Load the remote URL for development or the local html file for production.
+  // mainWindow.loadURL('https://cpall.ekoapp.com/recents/group/6669208b1ecfde693c96d366/chat/t/6669208b1ecfde19a296d368')
 }
 
 // This method will be called when Electron has finished

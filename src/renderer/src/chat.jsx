@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
-import { MainContainer, ChatContainer, MessageList, Message, MessageInput, TypingIndicator, Avatar } from '@chatscope/chat-ui-kit-react';
+import { MainContainer, ChatContainer, MessageList, Message, MessageInput, TypingIndicator, Avatar, ConversationHeader } from '@chatscope/chat-ui-kit-react';
 
 function Chat() {
   const ipcHandle = () => window.electron.ipcRenderer.send('ping');
@@ -10,7 +10,7 @@ function Chat() {
   const [messages, setMessages] = useState([
     {
       message: "Hello, how can I help you",
-      sender: "chatbot",
+      sender: "Chatbot",
       direction: "ingoing"
     }
   ]);
@@ -18,7 +18,7 @@ function Chat() {
   const handleSend = async (message) => {
     const newMessage = {
       message: message,
-      sender: "user",
+      sender: "User",
       direction: "outgoing"
     }
     
@@ -35,15 +35,13 @@ function Chat() {
     <div style={{position:"relative", height:"550px", width:"350px"}}>
       <MainContainer>
         <ChatContainer>
+          <ConversationHeader>
+            <Avatar name="Chatbot" size="fluid" src="src/images/chatbotpic.png"/>
+            <ConversationHeader.Content userName="Chatbot"/>
+          </ConversationHeader>
           <MessageList typingIndicator = {typing ? <TypingIndicator content={"Typing"}/> : null}>
             {messages.map((message, i) => {
-              if (message.sender == "chatbot") {
-                return (
-                  <Message key={i} model={message}>
-                    <Avatar name="chatbot" src="/src/images/chatbotpic.png"/>
-                  </Message>
-                )
-              } else return <Message key={i} model={message}/>
+              return <Message key={i} model={message}/>
             })}
           </MessageList>
           <MessageInput placeholder="Type message here" attachButton={false} onSend={handleSend}/>

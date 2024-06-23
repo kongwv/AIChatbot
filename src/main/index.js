@@ -28,6 +28,7 @@ function createWindow() {
   mainWindow.setPosition(width - bounds.width, height - bounds.height)
   mainWindow.resizable = false
   mainWindow.setSkipTaskbar(true)
+
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
   })

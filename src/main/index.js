@@ -1,7 +1,12 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, ipcMain,screen } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+
+
+const primaryDisplay = screen.getPrimaryDisplay()
+const { width, height } = primaryDisplay.workAreaSize // size of the computer screen
+
 
 function createWindow() {
   // Create the browser window.
@@ -12,8 +17,12 @@ function createWindow() {
 // width number - The width of the rectangle (must be an integer).
 // height number - The height of the rectangle (must be an integer).
   const mainWindow = new BrowserWindow({
+<<<<<<< Updated upstream
     width: 350,
     height: 550,
+=======
+    
+>>>>>>> Stashed changes
     show: false,
     devTools : true,
     autoHideMenuBar: true,
@@ -24,8 +33,18 @@ function createWindow() {
     }
     
   })
+<<<<<<< Updated upstream
   
 
+=======
+ 
+  let bounds = mainWindow.getBounds() // size of the application window
+  mainWindow.setPosition(width - bounds.width, height - bounds.height)
+
+
+  mainWindow.resizable = false
+  mainWindow.setSkipTaskbar(true)
+>>>>>>> Stashed changes
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
   })

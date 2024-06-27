@@ -4,11 +4,10 @@ import { electronAPI } from '@electron-toolkit/preload'
 // Custom APIs for renderer
 const api = {
   processMessageToChatGPT: (chatMessages) => {
-    ipcRenderer.invoke('process-message-to-chatgpt', chatMessages)
+    return ipcRenderer.invoke('process-message-to-chatgpt', chatMessages) // arrow function with {} requires explicit "return" to return values
   },
-  processMessageToGemini: (chatMessage) => {
-    ipcRenderer.invoke('process-message-to-gemini', chatMessage)
-  }
+  processMessageToGemini: (chatMessage) =>
+    ipcRenderer.invoke('process-message-to-gemini', chatMessage) // arrow function without {} automatically return values
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

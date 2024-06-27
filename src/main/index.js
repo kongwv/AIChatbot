@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, ipcMain, screen } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, screen, webContents } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
@@ -142,6 +142,6 @@ ipcMain.handle('process-message-to-gemini', async (event, chatMessage) => {
   const result = await model.generateContent(prompt)
   const response = await result.response
   const text = response.text()
-  console.log(text)
+  //console.log(text)
   return text
 })

@@ -59,7 +59,8 @@ function Chat() {
     setTyping(true);
 
     try {
-      const response = await window.api.processMessageToGemini(newMessage);
+      let response = await window.api.processMessageToGemini(newMessage);
+      //console.log(response)
       setMessages([...newMessages, {
         message: response,
         sender: "Gemini",
@@ -69,7 +70,7 @@ function Chat() {
       console.error('Error:', error.message);
     } finally {
       setTyping(false)
-    } 
+    }
   }
 
   return (

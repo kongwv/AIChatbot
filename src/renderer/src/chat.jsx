@@ -11,12 +11,12 @@ function Chat() {
   const [messages, setMessages] = useState([
     {
       message: "Hello, how can I help you",
-      sender: "ChatGPT",
+      sender: "Gemini",
       direction: "ingoing"
     }
   ]);
 
-  const handleSend = async (message) => {
+  const handleSendGPT = async (message) => {
     const newMessage = {
       message: message,
       sender: "User",
@@ -42,7 +42,34 @@ function Chat() {
     } finally {
       setTyping(false)
     }
+  }
 
+  const handleSendGemini = async (message) => {
+    const newMessage = {
+      message: message,
+      sender: "User",
+      direction: "outgoing"
+    }
+    
+    const newMessages = [...messages, newMessage]; // all the old messages, + the new message
+
+    // update our messages state
+    setMessages(newMessages);
+    // set a typing indicator
+    setTyping(true);
+
+    try {
+      const response = await window.api.processMessageToGemini(newMessage);
+      setMessages([...newMessages, {
+        message: response,
+        sender: "Gemini",
+        direction: "incoming"
+      }])
+    } catch (error){
+      console.error('Error:', error.message);
+    } finally {
+      setTyping(false)
+    } 
   }
 
   return (
@@ -58,7 +85,7 @@ function Chat() {
               return <Message key={i} model={message}/>
             })}
           </MessageList>
-          <MessageInput placeholder="Type message here" attachButton={false} onSend={handleSend}/>
+          <MessageInput placeholder="Type message here" attachButton={false} onSend={handleSendGemini}/>
         </ChatContainer>
       </MainContainer>
     </div>

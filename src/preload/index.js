@@ -5,6 +5,9 @@ import { electronAPI } from '@electron-toolkit/preload'
 const api = {
   processMessageToChatGPT: (chatMessages) => {
     ipcRenderer.invoke('process-message-to-chatgpt', chatMessages)
+  },
+  processMessageToGemini: (chatMessage) => {
+    ipcRenderer.invoke('process-message-to-gemini', chatMessage)
   }
 }
 

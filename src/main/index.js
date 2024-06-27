@@ -2,6 +2,7 @@ import { app, shell, BrowserWindow, ipcMain, screen } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+const { GoogleGenerativeAI } = require('@google/generative-ai')
 
 function createWindow() {
   // Create the browser window.
@@ -131,6 +132,16 @@ ipcMain.handle('process-message-to-chatgpt', async (event, chatMessages) => {
   }
 })
 
-ipcMain.handle('process-message-to-gemini', async (event, chatMessages) => {
+ipcMain.handle('process-message-to-gemini', async (event, chatMessage) => {
   const API_KEY = 'AIzaSyC30Qftd1JbdwZbMS_wbyoOhHtjza1pYOg'
+  const genAI = new GoogleGenerativeAI(API_KEY)
+  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
+
+  const prompt = chatMessage.message
+
+  const result = await model.generateContent(prompt)
+  const response = await result.response
+  const text = response.text()
+  console.log(text)
+  return text
 })

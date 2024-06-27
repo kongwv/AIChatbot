@@ -2,6 +2,7 @@ import { useState } from 'react'
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import { MainContainer, ChatContainer, MessageList, Message, MessageInput, TypingIndicator, Avatar, ConversationHeader } from '@chatscope/chat-ui-kit-react';
 
+
 function Chat() {
   const ipcHandle = () => window.electron.ipcRenderer.send('ping');
   
@@ -10,7 +11,7 @@ function Chat() {
   const [messages, setMessages] = useState([
     {
       message: "Hello, how can I help you",
-      sender: "Chatbot",
+      sender: "ChatGPT",
       direction: "ingoing"
     }
   ]);
@@ -28,6 +29,19 @@ function Chat() {
     setMessages(newMessages);
     // set a typing indicator
     setTyping(true);
+
+    try {
+      const response = await window.api.processMessageToChatGPT(newMessages);
+      setMessages([...newMessages, {
+        message: response.choices[0].message.content,
+        sender: "ChatGPT",
+        direction: "incoming"
+      }])
+    } catch (error){
+      console.error('Error:', error.message);
+    } finally {
+      setTyping(false)
+    }
 
   }
 

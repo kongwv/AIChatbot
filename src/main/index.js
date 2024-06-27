@@ -85,3 +85,52 @@ app.on('window-all-closed', () => {
 
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
+
+ipcMain.handle('process-message-to-chatgpt', async (event, chatMessages) => {
+  const API_KEY = 'sk-proj-As3lIUeOWWjDO7IEhYswT3BlbkFJvtqI7rOpWFWTtOn0BYpZ'
+
+  const apiMessages = chatMessages.map((messageObject) => {
+    let role = ''
+    if (messageObject.sender === 'ChatGPT') {
+      role = 'assistant'
+    } else {
+      role = 'user'
+    }
+    return { role: role, content: messageObject.message }
+  })
+
+  const apiRequestBody = {
+    model: 'gpt-3.5-turbo',
+    content: apiMessages
+  }
+
+  try {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        Authorization: 'Bearer ' + API_KEY,
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(apiRequestBody)
+    })
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    const data = await response.json()
+
+    if (data.error) {
+      throw new Error(`API error! message: ${data.error.message}`)
+    }
+
+    console.log(data)
+    return data
+  } catch (error) {
+    console.error('Error:', error.message)
+  }
+})
+
+ipcMain.handle('process-message-to-gemini', async (event, chatMessages) => {
+  const API_KEY = 'AIzaSyC30Qftd1JbdwZbMS_wbyoOhHtjza1pYOg'
+})

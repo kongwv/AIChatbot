@@ -9,11 +9,11 @@ function Chat() {
   const [typing, setTyping] = useState(false)
   
   const [messages, setMessages] = useState([
-    {
-      message: "Hello, how can I help you",
-      sender: "Gemini",
-      direction: "ingoing"
-    }
+    // {
+    //   message: "Hello, how can I help you",
+    //   sender: "Gemini",
+    //   direction: "ingoing"
+    // }
   ]);
 
   const handleSendGPT = async (message) => {

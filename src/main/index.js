@@ -87,7 +87,7 @@ app.on('window-all-closed', () => {
 // code. You can also put them in separate files and require them here.
 
 ipcMain.handle('process-message-to-chatgpt', async (event, chatMessages) => {
-  const API_KEY = 'sk-proj-As3lIUeOWWjDO7IEhYswT3BlbkFJvtqI7rOpWFWTtOn0BYpZ'
+  const API_KEY = ''
 
   const apiMessages = chatMessages.map((messageObject) => {
     let role = ''
@@ -132,5 +132,5 @@ ipcMain.handle('process-message-to-chatgpt', async (event, chatMessages) => {
 })
 
 ipcMain.handle('process-message-to-gemini', async (event, chatMessages) => {
-  const API_KEY = 'AIzaSyC30Qftd1JbdwZbMS_wbyoOhHtjza1pYOg'
+  const API_KEY = ''
 })

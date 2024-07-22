@@ -3,6 +3,9 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 const { GoogleGenerativeAI } = require('@google/generative-ai')
+const dotenv = require('dotenv')
+
+dotenv.config()
 
 function createWindow() {
   // Create the browser window.
@@ -88,7 +91,7 @@ app.on('window-all-closed', () => {
 // code. You can also put them in separate files and require them here.
 
 ipcMain.handle('process-message-to-chatgpt', async (event, chatMessages) => {
-  const API_KEY = 'sk-proj-As3lIUeOWWjDO7IEhYswT3BlbkFJvtqI7rOpWFWTtOn0BYpZ'
+  const API_KEY = process.env.OPENAI_API_KEY
 
   const apiMessages = chatMessages.map((messageObject) => {
     let role = ''
@@ -133,7 +136,7 @@ ipcMain.handle('process-message-to-chatgpt', async (event, chatMessages) => {
 })
 
 ipcMain.handle('process-message-to-gemini', async (event, chatMessage) => {
-  const API_KEY = 'AIzaSyC30Qftd1JbdwZbMS_wbyoOhHtjza1pYOg'
+  const API_KEY = process.env.GOOGLE_API_KEY
   const genAI = new GoogleGenerativeAI(API_KEY)
   const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
 

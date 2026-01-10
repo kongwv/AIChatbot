@@ -20,7 +20,9 @@
   "dependencies": {
     "@chatscope/chat-ui-kit-react": "^2.0.3",
     "@electron-toolkit/preload": "^3.0.0",
-    "@electron-toolkit/utils": "^3.0.0"
+    "@electron-toolkit/utils": "^3.0.0",
+    "@google/generative-ai": "^0.24.1",
+    "dotenv": "^17.2.3"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config": "^1.0.2",

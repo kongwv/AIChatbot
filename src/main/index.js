@@ -2,15 +2,13 @@ import { app, shell, BrowserWindow, ipcMain, screen } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-
+import dotenv from 'dotenv'
+dotenv.config()
 
 const { GoogleGenerativeAI } = require('@google/generative-ai')
 
 
-console.log('ENV CHECK:', {
-  GEMINI: process.env.VITE_GEMINI_API_KEY,
-  OPENAI: process.env.VITE_OPENAI_API_KEY
-})
+
 
 function createWindow() {
   // Create the browser window.
@@ -141,11 +139,11 @@ ipcMain.handle('process-message-to-chatgpt', async (event, chatMessages) => {
 })
 
 ipcMain.handle('process-message-to-gemini', async (_, chatMessage) => {
-  const apiKey = import.meta.env.VITE_GEMINI_API_KEY
+  const apiKey = process.env.VITE_GEMINI_API_KEY
   if (!apiKey) throw new Error('VITE_GEMINI_API_KEY missing')
 
   const genAI = new GoogleGenerativeAI(apiKey)
-  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
 
   const result = await model.generateContent(chatMessage.message)
   return result.response.text()

@@ -1,18 +1,15 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, screen } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-import path from 'path'
-import dotenv from 'dotenv'
+
+
 const { GoogleGenerativeAI } = require('@google/generative-ai')
 
-dotenv.config({
-  path: path.resolve(__dirname, '../../.env')
-})
 
 console.log('ENV CHECK:', {
-  GEMINI: process.env.GEMINI_API_KEY,
-  OPENAI: process.env.OPENAI_API_KEY
+  GEMINI: process.env.VITE_GEMINI_API_KEY,
+  OPENAI: process.env.VITE_OPENAI_API_KEY
 })
 
 function createWindow() {
@@ -20,12 +17,9 @@ function createWindow() {
   const mainWindow = new BrowserWindow({
     width: 350,
     height: 550,
-    // width: 800,
-    // height: 800,
     show: false,
     autoHideMenuBar: true,
-    frame: false, 
-    
+    frame: false,
 
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
@@ -33,12 +27,19 @@ function createWindow() {
       sandbox: false
     }
   })
-  mainWindow.setPosition(925, 120)
+
+  const primaryDisplay = screen.getPrimaryDisplay()
+
+  const { width, height } = primaryDisplay.workAreaSize // size of the computer screen
+
+  let bounds = mainWindow.getBounds() // size of the application window
+
+  mainWindow.setPosition(width - bounds.width, height - bounds.height)
   mainWindow.resizable = false
   mainWindow.setSkipTaskbar(true)
+
   mainWindow.on('ready-to-show', () => {
-  mainWindow.show()
-    
+    mainWindow.show()
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
@@ -93,6 +94,7 @@ app.on('window-all-closed', () => {
 
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
+
 ipcMain.handle('process-message-to-chatgpt', async (event, chatMessages) => {
   const API_KEY = process.env.OPENAI_API_KEY
 
@@ -138,25 +140,13 @@ ipcMain.handle('process-message-to-chatgpt', async (event, chatMessages) => {
   }
 })
 
-ipcMain.handle('process-message-to-gemini', async (event, chatMessage) => {
-  if (!process.env.GEMINI_API_KEY) {
-    throw new Error('GEMINI_API_KEY is missing');
-  }
+ipcMain.handle('process-message-to-gemini', async (_, chatMessage) => {
+  const apiKey = process.env.VITE_GEMINI_API_KEY
+  if (!apiKey) throw new Error('VITE_GEMINI_API_KEY missing')
 
-  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+  const genAI = new GoogleGenerativeAI(apiKey)
+  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
 
-  const result = await model.generateContent(chatMessage.message);
-  return result.response.text();
-  // const API_KEY = process.env.GEMINI_API_KEY
-  // const genAI = new GoogleGenerativeAI(API_KEY)
-  // const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
-
-  // const prompt = chatMessage.message
-
-  // const result = await model.generateContent(prompt)
-  // const response = await result.response
-  // const text = response.text()
-  // //console.log(text)
-  // return text
+  const result = await model.generateContent(chatMessage.message)
+  return result.response.text()
 })

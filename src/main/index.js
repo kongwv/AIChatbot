@@ -2,6 +2,14 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+<<<<<<< Updated upstream
+=======
+const { GoogleGenerativeAI } = require('@google/generative-ai')
+
+const dotenv = require('dotenv')
+
+dotenv.config()
+>>>>>>> Stashed changes
 
 function createWindow() {
   // Create the browser window.
@@ -81,3 +89,74 @@ app.on('window-all-closed', () => {
 
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
+<<<<<<< Updated upstream
+=======
+
+ipcMain.handle('process-message-to-chatgpt', async (event, chatMessages) => {
+  const API_KEY = process.env.OPENAI_API_KEY
+
+  const apiMessages = chatMessages.map((messageObject) => {
+    let role = ''
+    if (messageObject.sender === 'ChatGPT') {
+      role = 'assistant'
+    } else {
+      role = 'user'
+    }
+    return { role: role, content: messageObject.message }
+  })
+
+  const apiRequestBody = {
+    model: 'gpt-3.5-turbo',
+    content: apiMessages
+  }
+
+  try {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        Authorization: 'Bearer ' + API_KEY,
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(apiRequestBody)
+    })
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    const data = await response.json()
+
+    if (data.error) {
+      throw new Error(`API error! message: ${data.error.message}`)
+    }
+
+    console.log(data)
+    return data
+  } catch (error) {
+    console.error('Error:', error.message)
+  }
+})
+
+ipcMain.handle('process-message-to-gemini', async (event, chatMessage) => {
+  if (!process.env.GEMINI_API_KEY) {
+    throw new Error('GEMINI_API_KEY is missing');
+  }
+
+  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+
+  const result = await model.generateContent(chatMessage.message);
+  return result.response.text();
+  // const API_KEY = process.env.GEMINI_API_KEY
+  // const genAI = new GoogleGenerativeAI(API_KEY)
+  // const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
+
+  // const prompt = chatMessage.message
+
+  // const result = await model.generateContent(prompt)
+  // const response = await result.response
+  // const text = response.text()
+  // //console.log(text)
+  // return text
+})
+>>>>>>> Stashed changes

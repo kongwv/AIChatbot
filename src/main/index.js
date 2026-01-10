@@ -2,14 +2,18 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-<<<<<<< Updated upstream
-=======
+import path from 'path'
+import dotenv from 'dotenv'
 const { GoogleGenerativeAI } = require('@google/generative-ai')
 
-const dotenv = require('dotenv')
+dotenv.config({
+  path: path.resolve(__dirname, '../../.env')
+})
 
-dotenv.config()
->>>>>>> Stashed changes
+console.log('ENV CHECK:', {
+  GEMINI: process.env.GEMINI_API_KEY,
+  OPENAI: process.env.OPENAI_API_KEY
+})
 
 function createWindow() {
   // Create the browser window.
@@ -89,9 +93,6 @@ app.on('window-all-closed', () => {
 
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
-<<<<<<< Updated upstream
-=======
-
 ipcMain.handle('process-message-to-chatgpt', async (event, chatMessages) => {
   const API_KEY = process.env.OPENAI_API_KEY
 
@@ -159,4 +160,3 @@ ipcMain.handle('process-message-to-gemini', async (event, chatMessage) => {
   // //console.log(text)
   // return text
 })
->>>>>>> Stashed changes

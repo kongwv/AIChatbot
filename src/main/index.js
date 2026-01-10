@@ -141,7 +141,7 @@ ipcMain.handle('process-message-to-chatgpt', async (event, chatMessages) => {
 })
 
 ipcMain.handle('process-message-to-gemini', async (_, chatMessage) => {
-  const apiKey = process.env.VITE_GEMINI_API_KEY
+  const apiKey = import.meta.env.VITE_GEMINI_API_KEY
   if (!apiKey) throw new Error('VITE_GEMINI_API_KEY missing')
 
   const genAI = new GoogleGenerativeAI(apiKey)
